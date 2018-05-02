@@ -2,6 +2,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,9 @@ public class BrowserCrawler {
     String startingUrl;
     String siteMask;
     String descriptionPageMask;
+
+    private static final String USER_AGENT =
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
     public BrowserCrawler(String startingUrl, String siteMask, String descriptionPageMask){
         this.descriptionPageMask=descriptionPageMask;
@@ -33,7 +37,7 @@ public class BrowserCrawler {
         driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         crawlPage(startingUrl);
-        driver.close();
+
     }
     private void collectLinks(String xpath,Set<String> linksSet){
         List<WebElement> links=driver.findElements(By.xpath(xpath));
@@ -55,4 +59,13 @@ public class BrowserCrawler {
         } catch (Exception e){System.out.print(e.getMessage());}
 
     }
+    public void parseDescriptionPages(){
+        DescriptionPage page=new DescriptionPage(driver);
+        //for (String link:descriptionPages){
+            page.storeDescription(descriptionPages.iterator().next());
+        //}
+
+
+    }
+
 }

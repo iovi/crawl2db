@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PageFields>
+    <Field>
+        <name>VacancyName</name>
+        <xpath>//h1</xpath>
+    </Field>
+    <Field>
+        <name>Salary</name>
+        <xpath>//strong[starts-with(@class,'salary')]</xpath>
+    </Field>
+    <Field>
+        <name>CompanyName</name>
+        <xpath>//a[starts-with(@href,'/companies/')]</xpath>
+    </Field>
+</PageFields>

@@ -6,5 +6,6 @@ public class Main {
                 "https://",
                 "/vacancy/card/");
         browserCrawler.crawl();
+        browserCrawler.parseDescriptionPages();
     }
 }
