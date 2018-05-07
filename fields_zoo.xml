@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PageFields>
+    <Field>
+        <name>Title</name>
+        <xpath>//h1</xpath>
+    </Field>
+    <Field>
+        <name>AdvertText</name>
+        <xpath>//footer</xpath>
+    </Field>
+    <Field>
+        <name>Breed</name>
+        <xpath>//a[contains(@href,'/sort/?f_')]</xpath>
+    </Field>
+</PageFields>

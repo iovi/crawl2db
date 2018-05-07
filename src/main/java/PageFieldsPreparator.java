@@ -22,7 +22,7 @@ public class PageFieldsPreparator {
     public static List<PageField> preparePageFieldsList2(){
         try {
 
-            File file = new File("fields.xml");
+            File file = new File("fields_zoo.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(PageFieldsContainer.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             PageFieldsContainer container = (PageFieldsContainer) jaxbUnmarshaller.unmarshal(file);
