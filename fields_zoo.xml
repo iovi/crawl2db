@@ -3,13 +3,16 @@
     <Field>
         <name>Title</name>
         <xpath>//h1</xpath>
+        <datatype>String</datatype>
     </Field>
     <Field>
         <name>AdvertText</name>
         <xpath>//footer</xpath>
+        <datatype>String</datatype>
     </Field>
     <Field>
         <name>Breed</name>
         <xpath>//a[contains(@href,'/sort/?f_')]</xpath>
+        <datatype>String</datatype>
     </Field>
 </PageFields>

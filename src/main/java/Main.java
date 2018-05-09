@@ -8,8 +8,7 @@ public class Main {
         BrowserCrawler browserCrawler=new BrowserCrawler(
                 "http://www.zoo-zoo.ru/",
                 "https://",
-                "/messages/");
+                "/html/body//a[contains(@href,'/messages/')]");
         browserCrawler.crawl();
-        browserCrawler.parseDescriptionPages();
     }
 }

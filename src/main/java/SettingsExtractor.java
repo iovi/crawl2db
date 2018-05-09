@@ -8,27 +8,18 @@ import java.util.List;
 
 
 
-public class PageFieldsPreparator {
+public class SettingsExtractor {
 
 
 
-    public static List<PageField> preparePageFieldsList(){
-        List<PageField> fields=new ArrayList<PageField>();
-        fields.add(new PageField("VacancyName", "//h1"));
-        fields.add(new PageField("Salary", "//strong[starts-with(@class,'salary')]"));
-        fields.add(new PageField("Company", "//a[starts-with(@href,'/companies/')]"));
-        return fields;
-    }
-    public static List<PageField> preparePageFieldsList2(){
+
+    public static List<PageField> extractPageFieldsList(){
         try {
 
             File file = new File("fields_zoo.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(PageFieldsContainer.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             PageFieldsContainer container = (PageFieldsContainer) jaxbUnmarshaller.unmarshal(file);
-            for (PageField pageField: container.getPageFields()){
-                System.out.println(pageField.getName() + " = " +pageField.getXpath());
-            }
             return container.getPageFields();
         } catch (JAXBException e) {
             System.err.println(e.getMessage());
