@@ -3,8 +3,8 @@ public class Main {
         /*BrowserCrawler browserCrawler=new BrowserCrawler(
                 "https://www.zarplata.ru/vacancy/buhgalteriya-finansy-banki",
                 "https://",
-                "/vacancy/card/");
-        */
+                "/html/body//a[contains(@href,'/vacancy/card/')]");
+*/
         BrowserCrawler browserCrawler=new BrowserCrawler(
                 "http://www.zoo-zoo.ru/",
                 "https://",

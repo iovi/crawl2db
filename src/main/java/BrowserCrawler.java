@@ -2,9 +2,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class BrowserCrawler {
@@ -40,7 +38,7 @@ public class BrowserCrawler {
         initializeWebDriver();
         crawlPage(startingUrl);
         parseDescriptions();
-        driver.close();
+        //driver.close();
 
     }
     private void collectLinks(String xpath,Set<String> linksSet){
@@ -67,13 +65,19 @@ public class BrowserCrawler {
         System.out.println(fieldList.toString());
 
         for (String url: descriptionUrls){
+            System.out.println(url);
             driver.get(url);
             Description description=new Description();
             for(PageField field:fieldList){
-                System.out.println(field.getName());
-                description.storeField(field.getName(), driver.findElement(By.xpath(field.getXpath())).getText());
+                String fieldValue=null;
+                try {
+                    fieldValue=driver.findElement(By.xpath(field.getXpath())).getText();
+                } catch (Exception e) {}
+                finally {
+                    description.storeField(field.getName(), fieldValue);
+                }
             }
-            System.out.println("fields: " +description.getDescriptionFields().toString());
+            System.out.println("fields: " +description.getDescriptionFields().toString()+"\n");
             descriptions.add(description);
         }
     }

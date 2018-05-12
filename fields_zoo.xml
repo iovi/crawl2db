@@ -15,4 +15,9 @@
         <xpath>//a[contains(@href,'/sort/?f_')]</xpath>
         <datatype>String</datatype>
     </Field>
+    <Field>
+        <name>City</name>
+        <xpath>//div[span='Город:']/span[3]</xpath>
+        <datatype>String</datatype>
+    </Field>
 </PageFields>

@@ -3,13 +3,16 @@
     <Field>
         <name>VacancyName</name>
         <xpath>//h1</xpath>
+        <datatype>String</datatype>
     </Field>
     <Field>
         <name>Salary</name>
         <xpath>//strong[starts-with(@class,'salary')]</xpath>
+        <datatype>Integer</datatype>
     </Field>
     <Field>
         <name>CompanyName</name>
         <xpath>//a[starts-with(@href,'/companies/')]</xpath>
+        <datatype>String</datatype>
     </Field>
 </PageFields>
