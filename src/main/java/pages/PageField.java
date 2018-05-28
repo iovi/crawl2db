@@ -10,11 +10,11 @@ public class PageField {
     String name;
     String xpath;
     String datatype;
-    /*public PageField(String name, String xpath,String datatype){
+    public PageField(String name, String xpath,String datatype){
         this.name=name;
         this.xpath=xpath;
         this.datatype=datatype;
-    }*/
+    }
     public PageField(){}
 
     public String getXpath(){return this.xpath;}

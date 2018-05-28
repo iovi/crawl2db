@@ -16,8 +16,17 @@ public class DBController {
         loadDriver();
     }
 
-    public void createDataStructure(String TableName, Set<PageField> fields){
-
+    public void createDataStructure (String tableName, List<PageField> fields) throws SQLException{
+        String sql="create table if not exists "+tableName +" (" +
+                "id serial primary key";
+        for (PageField field : fields){
+            sql+=", "+field.getName()+" "+field.getDatatype();
+        }
+        sql+=");";
+        System.out.println(sql);
+        Statement statement=connection.createStatement();
+        statement.execute(sql);
+        statement.close();
     }
     public void fillDatabase(Map<String,String> fieldsValues){}
 

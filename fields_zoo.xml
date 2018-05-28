@@ -3,21 +3,21 @@
     <Field>
         <name>Title</name>
         <xpath>//h1</xpath>
-        <datatype>String</datatype>
+        <datatype>varchar</datatype>
     </Field>
     <Field>
         <name>AdvertText</name>
         <xpath>//footer</xpath>
-        <datatype>String</datatype>
+        <datatype>varchar</datatype>
     </Field>
     <Field>
         <name>Breed</name>
         <xpath>//a[contains(@href,'/sort/?f_')]</xpath>
-        <datatype>String</datatype>
+        <datatype>varchar</datatype>
     </Field>
     <Field>
         <name>City</name>
         <xpath>//div[span='Город:']/span[3]</xpath>
-        <datatype>String</datatype>
+        <datatype>varchar</datatype>
     </Field>
 </PageFields>
