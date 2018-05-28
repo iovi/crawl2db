@@ -1,9 +1,11 @@
+package pages;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
     @XmlRootElement (name="PageFields")
-    class PageFieldsContainer {
+    public class PageFieldsContainer {
         List<PageField> pageFields;
 
 

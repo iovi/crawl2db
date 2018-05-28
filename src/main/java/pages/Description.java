@@ -1,4 +1,4 @@
-import org.openqa.selenium.WebDriver;
+package pages;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ public class Description {
         fieldValues=new HashMap<String, String>();
     }
 
-    void storeField(String fieldName, String fieldValue){
+    public void storeField(String fieldName, String fieldValue){
         fieldValues.put(fieldName,fieldValue);
 
         /*driver.get(url);
@@ -20,6 +20,6 @@ public class Description {
         }
         System.out.println("map: "+fieldValues.toString());*/
     }
-    HashMap<String,String > getDescriptionFields(){return this.fieldValues;}
+    public HashMap<String,String > getDescriptionFields(){return this.fieldValues;}
 
 }

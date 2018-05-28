@@ -1,15 +1,18 @@
+package db;
+
 import java.sql.*;
 import java.util.*;
 
+import pages.PageField;
+import settings.SettingsExtractor;
+
 
 public class DBController {
-    private static final String url = "jdbc:postgresql://localhost:5432/crawler_db1";
-    private static final String user = "crawler";
-    private static final String password = "crawler1";
     Connection connection;
 
 
     public DBController() throws Exception{
+
         loadDriver();
     }
 
@@ -20,7 +23,11 @@ public class DBController {
 
     private void loadDriver() throws Exception {
        Class.forName("org.postgresql.Driver").newInstance();
-       connection= DriverManager.getConnection(url,user,password);
+       DBConfiguration dbConfiguration= SettingsExtractor.extractDBConfiguration();
+       connection= DriverManager.getConnection(
+               dbConfiguration.getConnectionUrl(),
+               dbConfiguration.getUser(),
+               dbConfiguration.getPassword());
 
     }
     public void endWorkingWithDB() {

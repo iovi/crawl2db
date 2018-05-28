@@ -1,5 +1,8 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import pages.Description;
+import pages.PageField;
+import settings.SettingsExtractor;
 
 
 import java.util.*;
