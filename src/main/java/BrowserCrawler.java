@@ -1,6 +1,6 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import pages.Description;
+import pages.Page;
 import pages.PageField;
 import settings.SettingsExtractor;
 
@@ -13,7 +13,7 @@ public class BrowserCrawler {
     private Set<String> visitedURLs = new HashSet<String>();
     private Set<String> pagesToVisit = new HashSet<String>();
     private Set<String> descriptionUrls = new HashSet<String>();
-    private Set<Description> descriptions;
+    private Set<Page> pages;
     String startingUrl;
     String siteMask;
     String descriptionPageXpath;
@@ -25,7 +25,7 @@ public class BrowserCrawler {
         this.descriptionPageXpath=descriptionPageXpath;
         this.siteMask=siteMask;
         this.startingUrl=startingUrl;
-        descriptions=new HashSet<Description>();
+        pages =new HashSet<Page>();
     }
 
     private void initializeWebDriver(){
@@ -70,18 +70,18 @@ public class BrowserCrawler {
         for (String url: descriptionUrls){
             System.out.println(url);
             driver.get(url);
-            Description description=new Description();
+            Page page =new Page(url);
             for(PageField field:fieldList){
                 String fieldValue=null;
                 try {
                     fieldValue=driver.findElement(By.xpath(field.getXpath())).getText();
                 } catch (Exception e) {}
                 finally {
-                    description.storeField(field.getName(), fieldValue);
+                    page.storeField(field.getName(), fieldValue);
                 }
             }
-            System.out.println("fields: " +description.getDescriptionFields().toString()+"\n");
-            descriptions.add(description);
+            System.out.println("fields: " + page.getFields().toString()+"\n");
+            pages.add(page);
         }
     }
 

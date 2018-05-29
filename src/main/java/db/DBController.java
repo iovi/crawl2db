@@ -3,6 +3,7 @@ package db;
 import java.sql.*;
 import java.util.*;
 
+import pages.Page;
 import pages.PageField;
 import settings.SettingsExtractor;
 
@@ -28,7 +29,33 @@ public class DBController {
         statement.execute(sql);
         statement.close();
     }
-    public void fillDatabase(Map<String,String> fieldsValues){}
+    public void fillDatabase(String tableName, List<Page> pages) throws SQLException {
+        System.out.println("start filling ");
+        for (Page page :pages){
+            String fieldNames="";
+            String fieldValues="";
+            if (page.getFields() != null){
+                Iterator<Map.Entry<String,String>> iterator=page.getFields().entrySet().iterator();
+                while (iterator.hasNext()){
+                    Map.Entry<String,String> field = iterator.next();
+                    System.out.println(field.getKey()+" ");
+                    fieldNames+=field.getKey();
+                    fieldValues+=field.getValue();
+                    if (iterator.hasNext()){
+                        fieldNames+=",";
+                        fieldValues+=",";
+                    }
+                }
+            }
+            if (fieldNames!=null && fieldValues!=null) {
+                String sql = "insert into " + tableName + "(" + fieldNames+") values("+fieldValues+");";
+                System.out.println(sql);
+                Statement statement=connection.createStatement();
+                statement.execute(sql);
+                statement.close();
+            }
+        }
+    }
 
     private void loadDriver() throws Exception {
        Class.forName("org.postgresql.Driver").newInstance();

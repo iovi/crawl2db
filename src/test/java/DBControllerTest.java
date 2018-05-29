@@ -1,11 +1,10 @@
 import db.DBController;
 import org.junit.*;
+import pages.Page;
 import pages.PageField;
 import settings.SettingsExtractor;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DBControllerTest {
     DBController controller;
@@ -20,14 +19,41 @@ public class DBControllerTest {
         }
     }
     @Test
-    public void createsTable(){
+    public void createsTableFromConfig(){
         try{
             List<PageField> pageFields= SettingsExtractor.extractPageFieldsList();
             controller.createDataStructure("Table2",pageFields);
         }catch (Exception e) {
-        System.err.println(e.getMessage());
-        Assert.fail();
+            System.err.println(e.getMessage());
+            Assert.fail();
+        }
     }
+    @Test
+    public void fillsTable(){
+        ArrayList<PageField> fields=new ArrayList<>();
+        ArrayList<Page> pages=new ArrayList<Page>();
+
+        fields.add(new PageField("name",null,"varchar"));
+        fields.add(new PageField("salary",null,"integer"));
+        fields.add(new PageField("birthday",null,"date"));
+
+        Page page1=new Page("http://1.url.com");
+        page1.storeField("name","'Vasily Terkin'");
+        page1.storeField("birthday","date'01.02.1943'");
+        Page page2=new Page("http://2.url.com");
+        page2.storeField("name","'Nikolay Gogol'");
+        page2.storeField("salary","100000");
+        page2.storeField("birthday","date'01.06.1805'");
+        pages.add(page1);
+        pages.add(page2);
+
+        try{
+            controller.createDataStructure("Table1",fields);
+            controller.fillDatabase("Table1",pages);
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+            Assert.fail();
+        }
     }
     @After
     public void closesConnection(){
