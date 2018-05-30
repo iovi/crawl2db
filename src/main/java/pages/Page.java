@@ -16,5 +16,6 @@ public class Page {
         fieldValues.put(fieldName,fieldValue);
     }
     public Map<String,String > getFields(){return this.fieldValues;}
+    public String getUrl(){return this.url;}
 
 }

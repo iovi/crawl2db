@@ -19,7 +19,8 @@ public class DBController {
 
     public void createDataStructure (String tableName, List<PageField> fields) throws SQLException{
         String sql="create table if not exists "+tableName +" (" +
-                "id serial primary key";
+                "id serial primary key, " +
+                "url varchar";
         for (PageField field : fields){
             sql+=", "+field.getName()+" "+field.getDatatype();
         }
@@ -29,21 +30,20 @@ public class DBController {
         statement.execute(sql);
         statement.close();
     }
-    public void fillDatabase(String tableName, List<Page> pages) throws SQLException {
-        System.out.println("start filling ");
+    public void fillDatabase(String tableName, List<PageField> pageFields, List<Page> pages) throws SQLException {
         for (Page page :pages){
-            String fieldNames="";
-            String fieldValues="";
+            String fieldNames="url";
+            String fieldValues="'"+page.getUrl()+"'";
+            String preparedValue;
             if (page.getFields() != null){
                 Iterator<Map.Entry<String,String>> iterator=page.getFields().entrySet().iterator();
                 while (iterator.hasNext()){
                     Map.Entry<String,String> field = iterator.next();
-                    System.out.println(field.getKey()+" ");
-                    fieldNames+=field.getKey();
-                    fieldValues+=field.getValue();
-                    if (iterator.hasNext()){
-                        fieldNames+=",";
-                        fieldValues+=",";
+                    System.out.println(field.getValue()+" ");
+                    preparedValue=prepareValueToDB(pageFields,field.getKey(),field.getValue());
+                    if (preparedValue!=null){
+                        fieldNames+=", "+field.getKey();
+                        fieldValues+=", "+preparedValue;
                     }
                 }
             }
@@ -57,6 +57,25 @@ public class DBController {
         }
     }
 
+    private static String prepareValueToDB(List<PageField> pageFields, String fieldName, String fieldValue){
+        String preparedValue=null;
+        for(PageField pageField:pageFields) {
+            if (pageField.getName().equals(fieldName)) {
+                switch (pageField.getDatatype()) {
+                    case "varchar":
+                        preparedValue= "'" + fieldValue + "'";
+                        break;
+                    case "date":
+                        preparedValue = "date'" + fieldValue + "'";
+                        break;
+                    case "integer":
+                        preparedValue = fieldValue;
+                        break;
+                }
+            }
+        }
+        return preparedValue;
+    }
     private void loadDriver() throws Exception {
        Class.forName("org.postgresql.Driver").newInstance();
        DBConfiguration dbConfiguration= SettingsExtractor.extractDBConfiguration();

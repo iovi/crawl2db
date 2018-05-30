@@ -12,17 +12,17 @@ public class BrowserCrawler {
     WebDriver driver;
     private Set<String> visitedURLs = new HashSet<String>();
     private Set<String> pagesToVisit = new HashSet<String>();
-    private Set<String> descriptionUrls = new HashSet<String>();
+    private Set<String> pageUrls = new HashSet<String>();
     private Set<Page> pages;
     String startingUrl;
     String siteMask;
-    String descriptionPageXpath;
+    String targetPageXpath;
 
     private static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
-    public BrowserCrawler(String startingUrl, String siteMask, String descriptionPageXpath){
-        this.descriptionPageXpath=descriptionPageXpath;
+    public BrowserCrawler(String startingUrl, String siteMask, String targetPageXpath){
+        this.targetPageXpath=targetPageXpath;
         this.siteMask=siteMask;
         this.startingUrl=startingUrl;
         pages =new HashSet<Page>();
@@ -40,7 +40,7 @@ public class BrowserCrawler {
     public void crawl(){
         initializeWebDriver();
         crawlPage(startingUrl);
-        parseDescriptions();
+        parsePages();
         //driver.close();
 
     }
@@ -55,19 +55,19 @@ public class BrowserCrawler {
         driver.get(url);
 
         try {
-            collectLinks(descriptionPageXpath, descriptionUrls);
-            for (String link : descriptionUrls){
-                System.out.println("description link "+link);
+            collectLinks(targetPageXpath, pageUrls);
+            for (String link : pageUrls){
+                System.out.println("page link "+link);
             }
 
         } catch (Exception e){System.out.print(e.getMessage());}
 
     }
-    private void parseDescriptions(){
+    private void parsePages(){
         List<PageField> fieldList = SettingsExtractor.extractPageFieldsList();
         System.out.println(fieldList.toString());
 
-        for (String url: descriptionUrls){
+        for (String url: pageUrls){
             System.out.println(url);
             driver.get(url);
             Page page =new Page(url);
@@ -80,7 +80,6 @@ public class BrowserCrawler {
                     page.storeField(field.getName(), fieldValue);
                 }
             }
-            System.out.println("fields: " + page.getFields().toString()+"\n");
             pages.add(page);
         }
     }
