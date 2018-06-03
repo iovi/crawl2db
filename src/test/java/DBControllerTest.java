@@ -12,7 +12,7 @@ public class DBControllerTest {
     @Before
     public void connectsToDB(){
         try {
-            controller=new DBController();
+            controller=new DBController("table1");
         }catch (Exception e) {
             System.err.println(e.getMessage());
             Assert.fail();
@@ -22,7 +22,7 @@ public class DBControllerTest {
     public void createsTableFromConfig(){
         try{
             List<PageField> pageFields= SettingsExtractor.extractPageFieldsList();
-            controller.createDataStructure("Table2",pageFields);
+            controller.createTable(pageFields);
         }catch (Exception e) {
             System.err.println(e.getMessage());
             Assert.fail();
@@ -48,8 +48,8 @@ public class DBControllerTest {
         pages.add(page2);
 
         try{
-            controller.createDataStructure("Table3",fields);
-            controller.fillDatabase("Table3",fields,pages);
+            controller.createTable(fields);
+            controller.fillTable(fields,pages);
         }catch (Exception e) {
             System.err.println(e.getMessage());
             Assert.fail();

@@ -10,51 +10,64 @@ import settings.SettingsExtractor;
 
 public class DBController {
     Connection connection;
+    String tableName;
 
 
-    public DBController() throws Exception{
-
+    public DBController(String tableName) throws Exception{
+        this.tableName=tableName;
         loadDriver();
     }
 
-    public void createDataStructure (String tableName, List<PageField> fields) throws SQLException{
-        String sql="create table if not exists "+tableName +" (" +
+    public void createTable (List<PageField> fields) throws SQLException{
+        String query="create table if not exists "+tableName +" (" +
                 "id serial primary key, " +
-                "url varchar";
+                "url varchar unique," +
+                "storing_time timestamp";
         for (PageField field : fields){
-            sql+=", "+field.getName()+" "+field.getDatatype();
+            query+=", "+field.getName()+" "+field.getDatatype();
         }
-        sql+=");";
-        System.out.println(sql);
+        query+=");";
+        System.out.println(query);
         Statement statement=connection.createStatement();
-        statement.execute(sql);
+        statement.execute(query);
         statement.close();
     }
-    public void fillDatabase(String tableName, List<PageField> pageFields, List<Page> pages) throws SQLException {
+    public void fillTable(List<PageField> pageFields, List<Page> pages) throws SQLException {
+        String insertQueries="";
         for (Page page :pages){
-            String fieldNames="url";
-            String fieldValues="'"+page.getUrl()+"'";
-            String preparedValue;
-            if (page.getFields() != null){
-                Iterator<Map.Entry<String,String>> iterator=page.getFields().entrySet().iterator();
-                while (iterator.hasNext()){
-                    Map.Entry<String,String> field = iterator.next();
-                    System.out.println(field.getValue()+" ");
-                    preparedValue=prepareValueToDB(pageFields,field.getKey(),field.getValue());
-                    if (preparedValue!=null){
-                        fieldNames+=", "+field.getKey();
-                        fieldValues+=", "+preparedValue;
-                    }
+            //String select
+            insertQueries+=insertQuery(pageFields,page);
+        }
+        if (insertQueries!=null) {
+            System.out.println(insertQueries);
+            Statement statement=connection.createStatement();
+            statement.execute(insertQueries);
+            statement.close();
+        }
+    }
+
+    private String insertQuery(List<PageField> pageFields, Page page){
+        String fieldNames="url,storing_time";
+        String fieldValues="'"+page.getUrl()+"', current_timestamp";
+        String query=null;
+        String updateValues="storing_time=current_timestamp";
+        String preparedValue;
+        if (page.getFields() != null){
+            for (Map.Entry<String,String> field:page.getFields().entrySet()){
+                System.out.println(field.getValue()+" ");
+                preparedValue=prepareValueToDB(pageFields,field.getKey(),field.getValue());
+                if (preparedValue!=null){
+                    fieldNames+=", "+field.getKey();
+                    fieldValues+=", "+preparedValue;
+                    updateValues+=", "+field.getKey()+"="+preparedValue;
                 }
             }
-            if (fieldNames!=null && fieldValues!=null) {
-                String sql = "insert into " + tableName + "(" + fieldNames+") values("+fieldValues+");";
-                System.out.println(sql);
-                Statement statement=connection.createStatement();
-                statement.execute(sql);
-                statement.close();
-            }
         }
+        if (fieldNames!=null && fieldValues!=null) {
+            query = "insert into " + tableName + "(" + fieldNames+") values("+fieldValues+") " +
+                    "on conflict (url) do update set "+updateValues+";";
+        }
+        return query;
     }
 
     private static String prepareValueToDB(List<PageField> pageFields, String fieldName, String fieldValue){
@@ -67,6 +80,9 @@ public class DBController {
                         break;
                     case "date":
                         preparedValue = "date'" + fieldValue + "'";
+                        break;
+                    case "timestamp":
+                        preparedValue="timestamp'"+ fieldValue + "'";
                         break;
                     case "integer":
                         preparedValue = fieldValue;
