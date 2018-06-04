@@ -35,7 +35,6 @@ public class DBController {
     public void fillTable(List<PageField> pageFields, List<Page> pages) throws SQLException {
         String insertQueries="";
         for (Page page :pages){
-            //String select
             insertQueries+=insertQuery(pageFields,page);
         }
         if (insertQueries!=null) {
@@ -94,7 +93,7 @@ public class DBController {
     }
     private void loadDriver() throws Exception {
        Class.forName("org.postgresql.Driver").newInstance();
-       DBConfiguration dbConfiguration= SettingsExtractor.extractDBConfiguration();
+       DBConfiguration dbConfiguration= SettingsExtractor.extractConfiguration(DBConfiguration.class);
        connection= DriverManager.getConnection(
                dbConfiguration.getConnectionUrl(),
                dbConfiguration.getUser(),

@@ -5,10 +5,7 @@ public class Main {
                 "https://",
                 "/html/body//a[contains(@href,'/vacancy/card/')]");
 */
-        BrowserCrawler browserCrawler=new BrowserCrawler(
-                "http://www.zoo-zoo.ru/",
-                "https://",
-                "/html/body//a[contains(@href,'/messages/')]");
+        BrowserCrawler browserCrawler=new BrowserCrawler();
         browserCrawler.crawl();
     }
 }

@@ -1,7 +1,10 @@
+import db.DBController;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import pages.Page;
 import pages.PageField;
+import pages.PageFieldsContainer;
+import pages.SiteConfiguration;
 import settings.SettingsExtractor;
 
 
@@ -13,19 +16,26 @@ public class BrowserCrawler {
     private Set<String> visitedURLs = new HashSet<String>();
     private Set<String> pagesToVisit = new HashSet<String>();
     private Set<String> pageUrls = new HashSet<String>();
-    private Set<Page> pages;
+    private List<Page> pages;
+    List<PageField> pageFields;
     String startingUrl;
-    String siteMask;
+    //String siteMask;
     String targetPageXpath;
+    String pageName;
 
     private static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
-    public BrowserCrawler(String startingUrl, String siteMask, String targetPageXpath){
-        this.targetPageXpath=targetPageXpath;
-        this.siteMask=siteMask;
-        this.startingUrl=startingUrl;
-        pages =new HashSet<Page>();
+    public BrowserCrawler(){
+        SiteConfiguration siteConfiguration=SettingsExtractor.extractConfiguration(SiteConfiguration.class);
+        this.targetPageXpath=siteConfiguration.getTargetPageXPath();
+        this.startingUrl=siteConfiguration.getSiteStartingUrl();
+        this.pageName=siteConfiguration.getPageName();
+
+        PageFieldsContainer pageFieldsContainer=SettingsExtractor.extractConfiguration(PageFieldsContainer.class);
+        this.pageFields=pageFieldsContainer.getPageFields();
+
+        pages =new LinkedList<>();
     }
 
     private void initializeWebDriver(){
@@ -41,6 +51,11 @@ public class BrowserCrawler {
         initializeWebDriver();
         crawlPage(startingUrl);
         parsePages();
+        try{
+            storePages();
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
         //driver.close();
 
     }
@@ -62,6 +77,7 @@ public class BrowserCrawler {
 
         } catch (Exception e){System.out.print(e.getMessage());}
 
+
     }
     private void parsePages(){
         List<PageField> fieldList = SettingsExtractor.extractPageFieldsList();
@@ -82,6 +98,11 @@ public class BrowserCrawler {
             }
             pages.add(page);
         }
+    }
+    private void storePages()  throws Exception {
+        DBController dbController =new DBController(this.pageName);
+        dbController.createTable(pageFields);
+        dbController.fillTable(pageFields,pages);
     }
 
 }
