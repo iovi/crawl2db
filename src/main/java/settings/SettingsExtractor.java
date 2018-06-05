@@ -22,7 +22,7 @@ public class SettingsExtractor {
         configFiles.put(PageFieldsContainer.class,"config/fields.xml");
     }
 
-    public static List<PageField> extractPageFieldsList(){
+    /*public static List<PageField> extractPageFieldsList(){
         try {
 
             File file = new File("fields_zoo.xml");
@@ -34,7 +34,7 @@ public class SettingsExtractor {
             System.err.println(e.getMessage());
         }
         return null;
-    }
+    }*/
     public static DBConfiguration extractDBConfiguration(){
         try {
 

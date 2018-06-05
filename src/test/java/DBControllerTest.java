@@ -2,6 +2,7 @@ import db.DBController;
 import org.junit.*;
 import pages.Page;
 import pages.PageField;
+import pages.PageFieldsContainer;
 import settings.SettingsExtractor;
 
 import java.util.*;
@@ -21,7 +22,7 @@ public class DBControllerTest {
     @Test
     public void createsTableFromConfig(){
         try{
-            List<PageField> pageFields= SettingsExtractor.extractPageFieldsList();
+            List<PageField> pageFields= SettingsExtractor.extractConfiguration(PageFieldsContainer.class).getPageFields();
             controller.createTable(pageFields);
         }catch (Exception e) {
             System.err.println(e.getMessage());
