@@ -8,7 +8,7 @@
     <Field>
         <name>Salary</name>
         <xpath>//strong[starts-with(@class,'salary')]</xpath>
-        <datatype>Integer</datatype>
+        <datatype>varchar</datatype>
     </Field>
     <Field>
         <name>CompanyName</name>

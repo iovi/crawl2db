@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DBConfiguration>
+    <connectionUrl>jdbc:postgresql://localhost:5432/crawler_db1</connectionUrl>
+    <user>crawler</user>
+    <password>crawler1</password>
+</DBConfiguration>

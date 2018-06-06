@@ -19,7 +19,7 @@ public class DBControllerTest {
             Assert.fail();
         }
     }
-    @Test
+    /*@Test
     public void createsTableFromConfig(){
         try{
             List<PageField> pageFields= SettingsExtractor.extractConfiguration(PageFieldsContainer.class).getPageFields();
@@ -28,7 +28,7 @@ public class DBControllerTest {
             System.err.println(e.getMessage());
             Assert.fail();
         }
-    }
+    }*/
     @Test
     public void fillsTable(){
         ArrayList<PageField> fields=new ArrayList<>();
@@ -49,7 +49,6 @@ public class DBControllerTest {
         pages.add(page2);
 
         try{
-            controller.createTable(fields);
             controller.fillTable(fields,pages);
         }catch (Exception e) {
             System.err.println(e.getMessage());

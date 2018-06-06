@@ -8,6 +8,7 @@ import pages.PageField;
 import settings.SettingsExtractor;
 
 
+/**Класс для взаимодействия с БД */
 public class DBController {
     Connection connection;
     String tableName;
@@ -18,7 +19,10 @@ public class DBController {
         loadDriver();
     }
 
-    public void createTable (List<PageField> fields) throws SQLException{
+    /**
+     * Создание таблицы в БД на основе заданного списка полей. Помимо колонок из списка полей создаются олонки id и url
+     * */
+    private void createTable (List<PageField> fields) throws SQLException{
         String query="create table if not exists "+tableName +" (" +
                 "id serial primary key, " +
                 "url varchar unique," +
@@ -32,7 +36,15 @@ public class DBController {
         statement.execute(query);
         statement.close();
     }
+
+    /**
+     * Заполнение таблицы данными.
+     * Старые данные сохраняются, данные вызывающие конфликты по полю url перезаписываются.
+     * @param pageFields список полей, определяющих структуру таблицы (используется в {@link #createTable(List)})
+     * @param pages страницы с информацией, которая будет сохранена в БД
+     * */
     public void fillTable(List<PageField> pageFields, List<Page> pages) throws SQLException {
+        createTable(pageFields);
         String insertQueries="";
         for (Page page :pages){
             insertQueries+=insertQuery(pageFields,page);
@@ -44,7 +56,9 @@ public class DBController {
             statement.close();
         }
     }
-
+    /**
+     * Подготовка запроса вставки данных
+     * */
     private String insertQuery(List<PageField> pageFields, Page page){
         String fieldNames="url,storing_time";
         String fieldValues="'"+page.getUrl()+"', current_timestamp";
@@ -68,12 +82,14 @@ public class DBController {
         }
         return query;
     }
-
+    /**
+     * Подготовка данных со страницы к "понятному" для БД виду
+     * */
     private static String prepareValueToDB(List<PageField> pageFields, String fieldName, String fieldValue){
         String preparedValue=null;
         for(PageField pageField:pageFields) {
             if (pageField.getName().equals(fieldName)) {
-                switch (pageField.getDatatype()) {
+                switch (pageField.getDatatype().toLowerCase()) {
                     case "varchar":
                         preparedValue= "'" + fieldValue + "'";
                         break;
@@ -91,6 +107,9 @@ public class DBController {
         }
         return preparedValue;
     }
+    /**
+     * Подключение к БД в соответствии с настройками
+     * */
     private void loadDriver() throws Exception {
        Class.forName("org.postgresql.Driver").newInstance();
        DBConfiguration dbConfiguration= SettingsExtractor.extractConfiguration(DBConfiguration.class);
@@ -100,6 +119,11 @@ public class DBController {
                dbConfiguration.getPassword());
 
     }
+
+    /**
+     * Завершение работы с базой.
+     * После выполнения этой функции остальные функции объекта не смогут быть корректно выполнены
+     * */
     public void endWorkingWithDB() {
         try {
             connection.close();

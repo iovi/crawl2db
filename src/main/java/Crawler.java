@@ -79,7 +79,6 @@ public class Crawler {
     }
     private void storePages()  throws Exception {
         DBController dbController =new DBController(this.pageName);
-        dbController.createTable(pageFields);
         dbController.fillTable(pageFields,pages);
     }
 
