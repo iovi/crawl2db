@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pages.BrowserParser;
+import pages.BrowserWorker;
 import pages.Page;
 import pages.PageField;
 import pages.PageFieldsContainer;
@@ -13,10 +13,10 @@ import java.util.Set;
 
 public class BrowserParserTest {
 
-    BrowserParser parser;
+    BrowserWorker parser;
     @Before
     public void initializeBrowserParser(){
-        parser=new BrowserParser();
+        parser=new BrowserWorker();
     }
 
     @Test

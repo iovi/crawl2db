@@ -1,9 +1,9 @@
-import pages.BrowserParser;
+import pages.BrowserWorker;
 
 public class Main {
     public static void main(String[] args) {
-        BrowserParser parser=new BrowserParser();
-        Crawler crawler =new Crawler(parser);
+        BrowserWorker browserWorker=new BrowserWorker();
+        Crawler crawler =new Crawler(browserWorker);
         crawler.crawl();
         //parser.closeBrowser();
     }

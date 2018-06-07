@@ -7,6 +7,8 @@ public class SiteConfiguration {
     String siteStartingUrl;
     String targetPageXPath;
     String pageName;
+    String nextPageXPath;
+    Integer pagesLimit;
 
     public String getTargetPageXPath() {
         return targetPageXPath;
@@ -31,5 +33,21 @@ public class SiteConfiguration {
 
     public void setSiteStartingUrl(String startingUrl) {
         this.siteStartingUrl = startingUrl;
+    }
+
+    public String getNextPageXPath() {
+        return nextPageXPath;
+    }
+
+    public void setNextPageXPath(String nextPageXPath) {
+        this.nextPageXPath = nextPageXPath;
+    }
+
+    public Integer getPagesLimit() {
+        return pagesLimit;
+    }
+
+    public void setPagesLimit(Integer pagesLimit) {
+        this.pagesLimit = pagesLimit;
     }
 }

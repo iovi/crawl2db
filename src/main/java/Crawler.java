@@ -1,33 +1,29 @@
 import db.DBController;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import pages.*;
 import settings.SettingsExtractor;
 
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Crawler {
-    //WebDriver driver;
-    private Set<String> visitedURLs = new HashSet<String>();
-    private Set<String> pagesToVisit = new HashSet<String>();
+
     private Set<String> pageUrls = new HashSet<String>();
     private List<Page> pages;
     List<PageField> pageFields;
     String startingUrl;
-    //String siteMask;
+    String nextPageXPath;
     String targetPageXpath;
     String pageName;
-    PageParser parser;
+    PageWorker pageWorker;
 
 
-    public Crawler(PageParser parser){
-        this.parser=parser;
+    public Crawler(PageWorker pageWorker){
+        this.pageWorker=pageWorker;
         SiteConfiguration siteConfiguration=SettingsExtractor.extractConfiguration(SiteConfiguration.class);
         this.targetPageXpath=siteConfiguration.getTargetPageXPath();
         this.startingUrl=siteConfiguration.getSiteStartingUrl();
         this.pageName=siteConfiguration.getPageName();
+        this.nextPageXPath=siteConfiguration.getNextPageXPath();
 
         PageFieldsContainer pageFieldsContainer=SettingsExtractor.extractConfiguration(PageFieldsContainer.class);
         this.pageFields=pageFieldsContainer.getPageFields();
@@ -38,7 +34,11 @@ public class Crawler {
 
 
     public void crawl(){
-        crawlPage(startingUrl);
+        String url=startingUrl;
+        for (int i=0;url!=null && i<3; i++){
+            crawlPage(url);
+            url=pageWorker.getNextPage(nextPageXPath);
+        }
         parsePages();
         try{
             storePages();
@@ -49,7 +49,7 @@ public class Crawler {
     }
     private void crawlPage(String url){
         try {
-            pageUrls=parser.getLinksSetByXPath(url,targetPageXpath);
+            pageUrls.addAll(pageWorker.getLinksSetByXPath(url,targetPageXpath));
             for (String link : pageUrls){
                 System.out.println("page link "+link);
             }
@@ -68,7 +68,7 @@ public class Crawler {
             for(PageField field:fieldList){
                 String fieldValue=null;
                 try {
-                    fieldValue=parser.getElementTextByXpath(url,field.getXpath());
+                    fieldValue=pageWorker.getElementTextByXpath(url,field.getXpath());
                 } catch (Exception e) {}
                 finally {
                     page.storeField(field.getName(), fieldValue);
