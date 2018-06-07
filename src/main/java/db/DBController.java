@@ -84,6 +84,10 @@ public class DBController {
     }
     /**
      * Подготовка данных со страницы к "понятному" для БД виду
+     * @param pageFields список допустимых полей
+     * @param fieldName имя подготавливаемого поля
+     * @param fieldValue значение подготавливаемого поля
+     * @return подготовленное значение, которое впоследствие можно использовать в SQL-запросах
      * */
     private static String prepareValueToDB(List<PageField> pageFields, String fieldName, String fieldValue){
         String preparedValue=null;
