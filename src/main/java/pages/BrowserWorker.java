@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -12,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 public class BrowserWorker implements PageWorker {
     WebDriver driver;
-    private static final String USER_AGENT =
-            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
     public BrowserWorker() {
         initializeWebDriver();
@@ -43,9 +42,14 @@ public class BrowserWorker implements PageWorker {
         return text;
     }
     public String getNextPage(String xpath){
-        driver.findElement(By.xpath(xpath)).click();
-        System.out.println("current url="+driver.getCurrentUrl());
-        return driver.getCurrentUrl();
+        if (xpath ==null) return null;
+        try{
+                driver.findElement(By.xpath(xpath)).click();
+                return driver.getCurrentUrl();
+        }  catch (NoSuchElementException e){
+            return null;
+        }
+
     }
     public void closeBrowser(){
         driver.close();

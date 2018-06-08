@@ -1,9 +1,5 @@
 package settings;
 
-import db.DBConfiguration;
-import pages.PageFieldsContainer;
-import pages.SiteConfiguration;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;

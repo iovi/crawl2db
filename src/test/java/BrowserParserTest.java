@@ -4,7 +4,7 @@ import org.junit.Test;
 import pages.BrowserWorker;
 import pages.Page;
 import pages.PageField;
-import pages.PageFieldsContainer;
+import settings.PageFieldsContainer;
 import settings.SettingsExtractor;
 
 import java.util.HashSet;

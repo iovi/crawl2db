@@ -1,6 +1,11 @@
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import db.DBController;
+import db.PostgreSQLController;
 import pages.*;
+import settings.PageFieldsContainer;
 import settings.SettingsExtractor;
+import settings.SiteConfiguration;
 
 
 import java.util.*;
@@ -14,16 +19,21 @@ public class Crawler {
     String nextPageXPath;
     String targetPageXpath;
     String pageName;
+    Integer pagesLimit;
+
     PageWorker pageWorker;
+    DBController dbController;
 
 
-    public Crawler(PageWorker pageWorker){
+    public Crawler(PageWorker pageWorker, PostgreSQLController dbController){
         this.pageWorker=pageWorker;
+        this.dbController=dbController;
         SiteConfiguration siteConfiguration=SettingsExtractor.extractConfiguration(SiteConfiguration.class);
         this.targetPageXpath=siteConfiguration.getTargetPageXPath();
         this.startingUrl=siteConfiguration.getSiteStartingUrl();
         this.pageName=siteConfiguration.getPageName();
         this.nextPageXPath=siteConfiguration.getNextPageXPath();
+        this.pagesLimit=siteConfiguration.getPagesLimit();
 
         PageFieldsContainer pageFieldsContainer=SettingsExtractor.extractConfiguration(PageFieldsContainer.class);
         this.pageFields=pageFieldsContainer.getPageFields();
@@ -35,10 +45,18 @@ public class Crawler {
 
     public void crawl(){
         String url=startingUrl;
-        for (int i=0;url!=null && i<3; i++){
-            crawlPage(url);
+        while (url!=null){
+            Set<String> urls=pageWorker.getLinksSetByXPath(url,targetPageXpath);
+            int availableNumOfPages=pagesLimit-pageUrls.size();
+            if (urls.size()<availableNumOfPages){
+                pageUrls.addAll(urls);
+            }else{
+                pageUrls.addAll(ImmutableSet.copyOf(Iterables.limit(urls,availableNumOfPages)));
+                break;
+            }
             url=pageWorker.getNextPage(nextPageXPath);
         }
+        System.out.println(pageUrls.size()+" page URLs found");
         parsePages();
         try{
             storePages();
@@ -47,39 +65,30 @@ public class Crawler {
         }
 
     }
-    private void crawlPage(String url){
-        try {
-            pageUrls.addAll(pageWorker.getLinksSetByXPath(url,targetPageXpath));
-            for (String link : pageUrls){
-                System.out.println("page link "+link);
-            }
-
-        } catch (Exception e){System.out.print(e.getMessage());}
-
-
-    }
     private void parsePages(){
         List<PageField> fieldList = SettingsExtractor.extractConfiguration(PageFieldsContainer.class).getPageFields();
-        System.out.println(fieldList.toString());
 
         for (String url: pageUrls){
-            System.out.println(url);
             Page page =new Page(url);
             for(PageField field:fieldList){
                 String fieldValue=null;
                 try {
                     fieldValue=pageWorker.getElementTextByXpath(url,field.getXpath());
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    System.out.println("Error with parsing "+ url+":\n"+e.getMessage());
+                }
                 finally {
                     page.storeField(field.getName(), fieldValue);
                 }
             }
             pages.add(page);
         }
+        System.out.println(pages.size()+" pages parsed");
     }
-    private void storePages()  throws Exception {
-        DBController dbController =new DBController(this.pageName);
-        dbController.fillTable(pageFields,pages);
+    private void storePages()  {
+        dbController.startWorkingWithDB();
+        dbController.fillTable(pageName,pageFields,pages);
+        dbController.endWorkingWithDB();
     }
 
 }
