@@ -33,8 +33,6 @@ public class PostgreSQLController implements DBController {
     /**
      * Заполнение таблицы данными.
      * Старые данные сохраняются, данные вызывающие конфликты по полю url перезаписываются.
-     * @param pageFields список полей, определяющих структуру таблицы (используется в {@link #createTable(String, List)} )
-     * @param pages страницы с информацией, которая будет сохранена в БД
      * */
     public void fillTable(String tableName,List<PageField> pageFields, List<Page> pages) {
         try{

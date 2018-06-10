@@ -6,7 +6,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.HashMap;
 
-/**Класс для извлечения настроек из xml-файлов*/
+/**Класс для извлечения настроек приложения*/
 public class SettingsExtractor {
 
     static HashMap<Class,String> configFiles=new HashMap<>();

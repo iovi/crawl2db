@@ -1,21 +1,22 @@
 package pages;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Поле веб-страницы,
+ */
 public class PageField {
 
+    /**Название поля*/
     String name;
+    /**Путь в формате XPath, по которому можно найти данное поле на странице*/
     String xpath;
+    /**Тип данных, содержащихся в поле*/
     String datatype;
     public PageField(String name, String xpath,String datatype){
         this.name=name;
         this.xpath=xpath;
         this.datatype=datatype;
     }
-    public PageField(){}
 
     public String getXpath(){return this.xpath;}
     public String getName(){return this.name;}

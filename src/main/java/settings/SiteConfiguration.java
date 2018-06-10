@@ -2,12 +2,18 @@ package settings;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**Конфигурация разбираемого сайта*/
 @XmlRootElement(name="SiteConfiguration")
 public class SiteConfiguration {
+    /**URL, с которого начинается разбор*/
     String siteStartingUrl;
-    String targetPageXPath;
-    String pageName;
+    /**XPath ссылки на следующую страницу, на которой будет выполняться разбор*/
     String nextPageXPath;
+    /**XPath ссылок на целевые страницы (те, на которых содержится интересующая инфомрмация*/
+    String targetPageXPath;
+    /**Название целевых страниц*/
+    String pageName;
+    /**Максимальное количество целевых страниц для обработки*/
     Integer pagesLimit;
 
     public String getTargetPageXPath() {
