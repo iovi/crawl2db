@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SiteConfiguration>
-    <pageName>Zoo_Advert</pageName>
-    <siteStartingUrl>http://www.zoo-zoo.ru/</siteStartingUrl>
-    <targetPageXPath>/html/body//a[contains(@href,'/messages/')]</targetPageXPath>
-    <pagesLimit>100</pagesLimit>
+    <pageName>Vacancy</pageName>
+    <siteStartingUrl>https://www.zarplata.ru/vacancy/buhgalteriya-finansy-banki</siteStartingUrl>
+    <targetPageXPath>/html/body//a[contains(@href,'/vacancy/card/')]</targetPageXPath>
+    <nextPageXPath>/html/body//button[@title='На следующую страницу']</nextPageXPath>
+    <pagesLimit>50</pagesLimit>
 </SiteConfiguration>

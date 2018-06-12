@@ -18,6 +18,8 @@ public class PageField {
         this.datatype=datatype;
     }
 
+    public PageField(){}
+
     public String getXpath(){return this.xpath;}
     public String getName(){return this.name;}
     public String getDatatype(){return this.datatype;}

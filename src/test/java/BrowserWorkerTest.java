@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,17 +12,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BrowserParserTest {
 
-    BrowserWorker parser;
+public class BrowserWorkerTest {
+
+    BrowserWorker worker;
     @Before
     public void initializeBrowserParser(){
-        parser=new BrowserWorker();
-    }
 
+        worker=new BrowserWorker();
+    }
+    /**Проверяет разбор страницы - выполняет тестовый разбор выводит резльтаты*/
     @Test
-    public void parsePages(){
-        List<PageField> fieldList= SettingsExtractor.extractConfiguration(PageFieldsContainer.class).getPageFields();
+    public void parsePagesTest(){
+        List<PageField> fieldList=SettingsExtractor.extractConfiguration(PageFieldsContainer.class).getPageFields();
         Set<String> pageUrls = new HashSet<String>();
         pageUrls.add("https://www.zarplata.ru/vacancy/card/201683400/Buhgalter?position=1&search_query=rubric_id%5B%5D%3D1");
         pageUrls.add("https://www.zarplata.ru/vacancy/card/201694437/Glavniy_buhgalter?position=10&search_query=rubric_id%5B%5D%3D1");
@@ -37,7 +40,7 @@ public class BrowserParserTest {
                 System.out.println("name="+field.getName());
                 System.out.println("xpath="+field.getXpath());
                 try {
-                    fieldValue = parser.getElementTextByXpath(url, field.getXpath());
+                    fieldValue = worker.getElementTextByXpath(url, field.getXpath());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     Assert.fail();
@@ -47,5 +50,9 @@ public class BrowserParserTest {
             }
             System.out.println(page.getFields().keySet().toString());
         }
+    }
+    @After
+    public void closeBrowser(){
+        worker.closeBrowser();
     }
 }

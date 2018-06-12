@@ -9,7 +9,7 @@ import settings.DBConfiguration;
 import settings.SettingsExtractor;
 
 
-/**Класс для взаимодействия с БД */
+/**Класс для взаимодействия с БД PostgreSQL*/
 public class PostgreSQLController implements DBController {
     Connection connection;
 
@@ -107,7 +107,7 @@ public class PostgreSQLController implements DBController {
         return preparedValue;
     }
     /**
-     * Подключение b начало работы с БД в соответствии с настройками
+     * Подключение и начало работы с БД в соответствии с настройками
      * */
     public void startWorkingWithDB() {
        try{

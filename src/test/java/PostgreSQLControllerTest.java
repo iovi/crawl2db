@@ -5,6 +5,10 @@ import pages.PageField;
 
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+/**Провека класса PostgreSQLController*/
 public class PostgreSQLControllerTest {
     PostgreSQLController controller;
 
@@ -12,13 +16,15 @@ public class PostgreSQLControllerTest {
     public void connectsToDB(){
         try {
             controller=new PostgreSQLController();
+            controller.startWorkingWithDB();
         }catch (Exception e) {
             System.err.println(e.getMessage());
             Assert.fail();
         }
     }
+    /**Проверяется правильность заполнения таблицы (впоследствии выбирается то же самое что и сохранилось)*/
     @Test
-    public void fillsTable(){
+    public void fillTableTest(){
         ArrayList<PageField> fields=new ArrayList<>();
         ArrayList<Page> pages=new ArrayList<Page>();
 
@@ -38,6 +44,17 @@ public class PostgreSQLControllerTest {
 
         try{
             controller.fillTable("table1",fields,pages);
+            DBSelector selector=new DBSelector();
+            selector.startWorkingWithDB();
+            HashMap<String,Object> selected=selector.selectAllFromDB("table1","url='http://1.url.com'",fields);
+            assertEquals((String)selected.get("name"),"Vasily Terkin");
+
+            selected=selector.selectAllFromDB("table1","url='http://2.url.com'",fields);
+
+            assertEquals((String)selected.get("name"),"Nikolay Gogol");
+            assertTrue((Integer)selected.get("salary")==100000);
+
+            selector.endWorkingWithDB();
         }catch (Exception e) {
             System.err.println(e.getMessage());
             Assert.fail();

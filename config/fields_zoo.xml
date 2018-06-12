@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PageFields>
+    <Field>
+        <name>Title</name>
+        <xpath>//h1</xpath>
+        <datatype>varchar</datatype>
+    </Field>
+    <Field>
+        <name>AdvertText</name>
+        <xpath>//footer</xpath>
+        <datatype>varchar</datatype>
+    </Field>
+    <Field>
+        <name>Breed</name>
+        <xpath>//a[contains(@href,'/sort/?f_')]</xpath>
+        <datatype>varchar</datatype>
+    </Field>
+    <Field>
+        <name>City</name>
+        <xpath>//div[span='Город:']/span[3]</xpath>
+        <datatype>varchar</datatype>
+    </Field>
+</PageFields>
